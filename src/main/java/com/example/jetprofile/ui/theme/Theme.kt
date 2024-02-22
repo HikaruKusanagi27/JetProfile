@@ -9,11 +9,13 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.activity.ComponentActivity
+import androidx.compose.ui.graphics.Color
+
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -55,11 +57,10 @@ fun JetProfileTheme(
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-        }
+        val window = (view.context as ComponentActivity).window
+        window.statusBarColor = if (darkTheme) Color.Black.toArgb() else Color.White.toArgb()
+        val insetsController = WindowCompat.getInsetsController(window, view)
+        insetsController?.isAppearanceLightStatusBars = !darkTheme // ダークテーマならfalse、ライトテーマならtrueに設定
     }
 
     MaterialTheme(
