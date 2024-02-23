@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 
 
@@ -57,10 +58,13 @@ fun JetProfileTheme(
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
-        val window = (view.context as ComponentActivity).window
-        window.statusBarColor = if (darkTheme) Color.Black.toArgb() else Color.White.toArgb()
-        val insetsController = WindowCompat.getInsetsController(window, view)
-        insetsController?.isAppearanceLightStatusBars = !darkTheme // ダークテーマならfalse、ライトテーマならtrueに設定
+        SideEffect {
+            val window = (view.context as ComponentActivity).window
+            window.statusBarColor = if (darkTheme) Color.Black.toArgb() else Color.White.toArgb()
+            val insetsController = WindowCompat.getInsetsController(window, view)
+            insetsController?.isAppearanceLightStatusBars =
+                !darkTheme // ダークテーマならfalse、ライトテーマならtrueに設定
+        }
     }
 
     MaterialTheme(
